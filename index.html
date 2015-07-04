@@ -131,10 +131,15 @@ function sanitizeString(str){
 function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status, numplayers, maxplayers, ping)
 {
 //because people can't be trusted with html tags, filter them out
-    name = sanitizeString(name);
-    name = name.substring(0,50);
-    host = sanitizeString(host);
-    host = host.substring(0,50);
+    name = sanitizeString(name).substring(0,50);
+    host = sanitizeString(host).substring(0,50);
+    map = sanitizeString(map).substring(0,50);
+    map = sanitizeString(map).substring(0,50);
+    mapfile = sanitizeString(mapfile).substring(0,50);
+    gamemode = sanitizeString(gamemode).substring(0,50);
+    status = sanitizeString(status).substring(0,50);
+    numplayers = sanitizeString(numplayers).substring(0,2);
+    maxplayers = sanitizeString(maxplayers).substring(0,2);
 
     var servName = "<td>" + name + "</br>" + "<b>Host</b> - " + host + "</br>" + "<b> IP </b> - " + ip + " - <a onclick=\"callbacks.connect('" + ip + "');\">" + "<b><font color=red>Join</font></b></a>"   + "</br>" + "<b>Variant</b> - " + map + "</br>" + "<b>GameType</b> - " + gamemode + "</br>" + "</td>";
     if(isPassworded)

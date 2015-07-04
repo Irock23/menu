@@ -136,7 +136,7 @@ function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status,
     host = sanitizeString(host);
     host = host.substring(0,50);
 
-    var servName = "<td>" + name + "</br>" + "<b>Host</b> - " + host + "</br>" + "<b> IP </b> - " + ip + " - <a href=\"callbacks.connect'" + ip + "');\">" + "<b><font color=red>Join</font></b></a>"   + "</br>" + "<b>Variant</b> - " + map + "</br>" + "<b>GameType</b> - " + gamemode + "</br>" + "</td>";
+    var servName = "<td>" + name + "</br>" + "<b>Host</b> - " + host + "</br>" + "<b> IP </b> - " + ip + " - <a href=\"callbacks.connect('" + ip + "');\">" + "<b><font color=red>Join</font></b></a>"   + "</br>" + "<b>Variant</b> - " + map + "</br>" + "<b>GameType</b> - " + gamemode + "</br>" + "</td>";
     if(isPassworded)
         servName = "<td><a href=\"#\" onclick=\"promptPassword('" + ip + "');\">[PASSWORDED] " + name + " (" + host + ")</a></td>";
 

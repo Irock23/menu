@@ -108,6 +108,10 @@ function queryServer(serverIP)
         var isPassworded = serverInfo.passworded !== undefined;
 //if no serverInfo.map, they jumped into an active game without unannouncing their server, causing a duplicate unjoinable game
         if(serverInfo.map == "") return;
+        
+        // hackers again...
+        serverIP = sanitizeString(serverIP).substring(0,30);
+        
         addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken);
         console.log(serverInfo);
     });

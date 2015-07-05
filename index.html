@@ -153,7 +153,7 @@ function validateIP(str){
 
 function invalidServer(name, variant, variantType, map, maxPlayers, numPlayers, hostPlayer) {
 
-        if (name.match(/<(?:.|\n)*?>/gm) || variant.match(/<(?:.|\n)*?>/gm) || variantType.match(/<(?:.|\n)*?>/gm) || map.match(/<(?:.|\n)*?>/gm) || maxPlayers.toString().match(/<(?:.|\n)*?>/gm) || numPlayers.toString().match(/<(?:.|\n)*?>/gm) || hostPlayer.match(/<(?:.|\n)*?>/gm))
+        if (encodeURIComponent(name).match("%3C","%3E") || encodeURIComponent(variant).match("%3C","%3E") || encodeURIComponent(map).match("%3C","%3E") || encodeURIComponent(maxPlayers).match("%3C","%3E") || encodeURIComponent(numPlayers).match("%3C","%3E") || encodeURIComponent(hostPlayer).match("%3C","%3E"))
 		{
 			console.log("Javascript found in one of the variables, skipping server");
 			return true;

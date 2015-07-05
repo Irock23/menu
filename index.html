@@ -72,7 +72,9 @@ $(document).ready(function()
         for(var i = 0; i < data.result.servers.length; i++)
         {
             var serverIP = data.result.servers[i];
-            queryServer(serverIP);
+	    if(validateIP(serverIP)) {
+		queryServer(serverIP);
+	    }
         }
     });
 
@@ -92,7 +94,9 @@ $("#refresh").click(function()
         for(var i = 0; i < data.result.servers.length; i++)
         {
             var serverIP = data.result.servers[i];
-            queryServer(serverIP);
+	    if(validateIP(serverIP)) {
+		queryServer(serverIP);
+	    }
         }
     });
 });
@@ -106,11 +110,11 @@ function queryServer(serverIP)
         console.log(timeTaken);
         if(serverInfo.name === undefined) return;
         var isPassworded = serverInfo.passworded !== undefined;
-//if no serverInfo.map, they jumped into an active game without unannouncing their server, causing a duplicate unjoinable game
+	//if no serverInfo.map, they jumped into an active game without unannouncing their server, causing a duplicate unjoinable game
         if(serverInfo.map == "") return;
         
-        // hackers again...
-        serverIP = sanitizeString(serverIP).substring(0,30);
+	//if any variables include js tags, skip them
+	if(invalidServer(serverInfo.name, serverInfo.variant, serverInfo.variantType, serverInfo.mapFile, serverInfo.maxPlayers, serverInfo.numPlayers, serverInfo.hostPlayer) == true) return;    
         
         addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken);
         console.log(serverInfo);
@@ -130,6 +134,32 @@ function sanitizeString(str){
     str = str.toString();
     if(str != null) str = str.replace(/(<([^>]+)>)/ig,"");
     return str;
+}
+
+function validateIP(str){
+    str = str.toString();
+    if(str != null){
+		if(/^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/i.test(str)) {
+			return true;
+		}else{
+			console.log(str + " is not a valid ip, skipping");
+			return false;
+		}
+	}else {
+	console.log(str + " is not a valid ip, skipping");
+    return false;
+	}
+}
+
+function invalidServer(name, variant, variantType, map, maxPlayers, numPlayers, hostPlayer) {
+
+        if (name.match(/<(?:.|\n)*?>/gm) || variant.match(/<(?:.|\n)*?>/gm) || variantType.match(/<(?:.|\n)*?>/gm) || map.match(/<(?:.|\n)*?>/gm) || maxPlayers.toString().match(/<(?:.|\n)*?>/gm) || numPlayers.toString().match(/<(?:.|\n)*?>/gm) || hostPlayer.match(/<(?:.|\n)*?>/gm))
+		{
+			console.log("Javascript found in one of the variables, skipping server");
+			return true;
+		}else{
+			return false;
+		}
 }
  
 

@@ -1,5 +1,5 @@
 /*
-   	(c) 2015 Brayden Strasen & Ryan Palmer
+    (c) 2015 Brayden Strasen
     https://creativecommons.org/licenses/by-nc-sa/4.0/
 */
 var players = [],
@@ -46,4 +46,3 @@ function totalPlayersLoop()
 		totalPlayersLoop();
 	}, 30000);
 }
-

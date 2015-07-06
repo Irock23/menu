@@ -15,32 +15,33 @@ $(document).ready(function() {
 	initalize();
 });
 
-function getTotalPlayers()
-{
+function getTotalPlayers() {
 	var totalPlayers = 0;
 	$.getJSON("http://192.99.124.162/list", function(data) {
 		for (var i = 0; i < data.result.servers.length; i++) {
 			var serverIP = data.result.servers[i];
-			$.getJSON("http://" + serverIP, function(serverInfo) {
-				totalPlayers += serverInfo.numPlayers;
-				console.log(totalPlayers);
-				$('#players-online').text(totalPlayers + " Players Online");
-			});
+			if (!serverIP.toString().contains("?")) {
+				$.getJSON("http://" + serverIP, function(serverInfo) {
+					totalPlayers += serverInfo.numPlayers;
+					$('#players-online').text(totalPlayers + " Players Online");
+				});
+			}
 		}
 	});
 }
 
-function totalPlayersLoop()
-{
+function totalPlayersLoop() {
 	delay(function() {
 		var totalPlayers = 0;
 		$.getJSON("http://192.99.124.162/list", function(data) {
 			for (var i = 0; i < data.result.servers.length; i++) {
 				var serverIP = data.result.servers[i];
-				$.getJSON("http://" + serverIP, function(serverInfo) {
-					totalPlayers += serverInfo.numPlayers;
-					$('#players-online').text(totalPlayers + " Players Online");
-				});
+				if (!serverIP.toString().contains("?")) {
+					$.getJSON("http://" + serverIP, function(serverInfo) {
+						totalPlayers += serverInfo.numPlayers;
+						$('#players-online').text(totalPlayers + " Players Online");
+					});
+				}
 			}
 		});
 		totalPlayersLoop();

@@ -68,18 +68,19 @@
                     numplayers = parseInt(numplayers);
                     maxplayers = parseInt(maxplayers);
 
-                    var servName = "<td>" + name  + " <b>(" +  host + "</b>)" + "</td>";
-                    if(isPassworded)
-                        servName = "<td><a href=\"#\" onclick=\"promptPassword('" + ip + "');\">[PASSWORDED] " + name + " (" + host + ")</a></td>";
+                    if (isPassworded) name = '[PASSWORDED] ' + name;
 
+                    var servName = "<td>" + name  + " <b>(" +  host + "</b>)" + "</td>";
                     var servMap = "<td>" + map + " (" + mapfile + ")" +  "</td>";
                     var servGameType = "<td>" + gamemode + "</br>" + "</td>";
                     var servIP = "<td>" + ip + "</td>";
                     var servStatus = "<td>" + status + "</td>";
                     var servPlayers = "<td>" + numplayers + "/" + maxplayers + "</td>";
-                 
+                    
+                    var onclick = (isPassworded ? 'promptPassword' : 'callbacks.connect') + "('" + ip + "');";
+
                     //$('#serverlist tr:last').after
-                    $('#serverlist > tbody').append("<tr onclick=\"callbacks.connect('" + ip + "');\">" + servName + servIP + servGameType + servMap +   servStatus + servPlayers + "</tr>");
+                    $('#serverlist > tbody').append("<tr onclick=\"" + onclick + "\">" + servName + servIP + servGameType + servMap +   servStatus + servPlayers + "</tr>");
 
                 }
             </script>

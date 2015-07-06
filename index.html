@@ -62,6 +62,8 @@ $("#refresh").click(function()
     });
 });
 
+
+
 function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status, numplayers, maxplayers, ping)
 {
 //because people can't be trusted with html tags, filter them out
@@ -74,17 +76,18 @@ function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status,
     numplayers = sanitizeString(numplayers).substring(0,2);
     maxplayers = sanitizeString(maxplayers).substring(0,2);
 
-    var servName = "<td>" + "<a onclick=\"callbacks.connect('" + ip + "');\">" + name  + " <b>(" +  host + "</b>)" + "</a></td>";
+    var servName = "<td><a href=\"#\" onClick=\"callbacks.connect('" + ip + "');\">" + name  + " <b>(" +  host + "</b>)" + "</a></td>";
     if(isPassworded)
         servName = "<td><a href=\"#\" onclick=\"promptPassword('" + ip + "');\">[PASSWORDED] " + name + " (" + host + ")</a></td>";
 
-    var servMap = "<td>" + map + "(" + mapfile + ")" +  "</td>";
-    var servGameType = "<td>" + gamemode + "</br>" + "</td>";
-    var servIP = "<td>" + ip + "</td>";
-    var servStatus = "<td>" + status + "</td>";
-    var servPlayers = "<td>" + numplayers + "/" + maxplayers + "</td>";
+    var servMap = "<td><a href=\"#\" onClick=\"callbacks.connect('" + ip + "');\">" + map + "(" + mapfile + ")" +  "</a></td>";
+    var servGameType = "<td><a href=\"#\" onClick=\"callbacks.connect('" + ip + "');\">" + gamemode + "</br>" + "</a></td>";
+    var servIP = "<td><a href=\"#\" onClick=\"callbacks.connect('" + ip + "');\">" + ip + "</a></td>";
+    var servStatus = "<td><a href=\"#\" onClick=\"callbacks.connect('" + ip + "');\">" + status + "</a></td>";
+    var servPlayers = "<td><a href=\"#\" onClick=\"callbacks.connect('" + ip + "');\">" + numplayers + "/" + maxplayers + "</a></td>";
  
-    $('#serverlist tr:last').after("<tr>" + servName + servIP + servGameType + servMap +   servStatus + servPlayers + "</tr>");
+    $('#serverlist tr:last').after("<tr>" + servName + servIP + servGameType + servMap +   servStatus + servPlayers + "</a></tr>");
+
 
 }
  

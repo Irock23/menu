@@ -79,7 +79,7 @@ iframe
     -webkit-text-fill-color: transparent;
 }
 
-#refresh{
+#refresh {
 	  width:100%;
 	  height:25px;
 	  margin-top: 15px;
@@ -114,13 +114,17 @@ tr:hover
 	width: 100%;
 }
 
+#serverlist > tbody > tr {
+	cursor: pointer;
+}
+
 #serverlist > thead > tr > th, #refresh {
 	background-color: rgba(255, 255, 255, 0.1);
 	color: rgba(255,255,255,0.95);
 }
 
-#serverlist > tbody > tr {
-	cursor: pointer;
+#refresh:hover {
+	background-color: rgba(255, 255, 255, 0.15);
 }
 
 .center {
@@ -145,6 +149,6 @@ th {
 }
 
 td, th {
-	padding:20px 5px 10px 10px;
+	padding:15px 10px;
 	border-bottom:1px solid #555555;
 }

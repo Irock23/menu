@@ -52,17 +52,14 @@
                     fetchServerList();
                 });
 
-                function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status, numplayers, maxplayers, ping)
-                {
-                //because people can't be trusted with html tags, filter them out
+                function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status, numplayers, maxplayers, ping) {
+                    //because people can't be trusted with html, filter it out
                     name = sanitizeString(name).substring(0,50);
                     host = sanitizeString(host).substring(0,50);
                     map = sanitizeString(map).substring(0,50);
                     mapfile = sanitizeString(mapfile).substring(0,50);
                     gamemode = sanitizeString(gamemode).substring(0,50);
                     status = sanitizeString(status).substring(0,50);
-                    //numplayers = sanitizeString(numplayers).substring(0,2);
-                    //maxplayers = sanitizeString(maxplayers).substring(0,2);
                     numplayers = parseInt(numplayers);
                     maxplayers = parseInt(maxplayers);
 

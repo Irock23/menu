@@ -15,35 +15,32 @@ function fetchServerList() {
         console.log(data);
         for(var i = 0; i < data.result.servers.length; i++) {
             var serverIP = data.result.servers[i];
-	        if(validateIP(serverIP)) {
-		        queryServer(serverIP);
-	        }
+            queryServer(serverIP);
         }
     });
 }
     
-function queryServer(serverIP)
-{
+function queryServer(serverIP) {
     console.log(serverIP);
+    if (!validateIP(serverIP)) return; //this makes more sense here
     var startTime = Date.now();
     $.getJSON("http://" + serverIP, function(serverInfo) {
         var timeTaken = Date.now() - startTime;
         console.log(timeTaken);
         if(serverInfo.name === undefined) return;
         var isPassworded = serverInfo.passworded !== undefined;
-	//if no serverInfo.map, they jumped into an active game without unannouncing their server, causing a duplicate unjoinable game
-        if(serverInfo.map == "") return;
+        //if no serverInfo.map, they jumped into an active game without unannouncing their server, causing a duplicate unjoinable game
+        if(!serverInfo.map) return;
         
-	//if any variables include js tags, skip them
-	if(invalidServer(serverInfo.name, serverInfo.variant, serverInfo.variantType, serverInfo.mapFile, serverInfo.maxPlayers, serverInfo.numPlayers, serverInfo.hostPlayer) == true) return;    
-        
-        addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken);
-        console.log(serverInfo);
+	    //if any variables include js tags, skip them
+	    if(!invalidServer(serverInfo.name, serverInfo.variant, serverInfo.variantType, serverInfo.mapFile, serverInfo.maxPlayers, serverInfo.numPlayers, serverInfo.hostPlayer)) {
+            addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken);
+            console.log(serverInfo);
+        }
     });
 }
 
-function promptPassword(serverIP)
-{
+function promptPassword(serverIP) {
     var password = prompt("The server at " + serverIP + " is passworded, enter the password to join", "");
     if(password != null)
     {
@@ -51,7 +48,7 @@ function promptPassword(serverIP)
     }
 }
 
-function sanitizeString(str){
+function sanitizeString(str) {
     return String(str).replace(/(<([^>]+)>)/ig,"") //shouldn't need to strip tags with the below replacements, but I'll keep it anyway
                       .replace(/&/g, '&amp;')
                       .replace(/</g, '&lt;')
@@ -60,7 +57,7 @@ function sanitizeString(str){
                       .replace(/"/g, '&quot;');
 }
 
-function validateIP(str){
+function validateIP(str) {
     if (str) {
         str = String(str);
 		if(/^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/i.test(str)) {

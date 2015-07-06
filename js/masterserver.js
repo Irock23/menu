@@ -52,9 +52,12 @@ function promptPassword(serverIP)
 }
 
 function sanitizeString(str){
-    str = str.toString();
-    if(str != null) str = str.replace(/(<([^>]+)>)/ig,"");
-    return str;
+    return String(str).replace(/(<([^>]+)>)/ig,"") //shouldn't need to strip tags with the below replacements, but I'll keep it anyway
+                      .replace(/&/g, '&amp;')
+                      .replace(/</g, '&lt;')
+                      .replace(/>/g, '&gt;')
+                      .replace(/'/g, '&#39;')
+                      .replace(/"/g, '&quot;');
 }
 
 function validateIP(str){
@@ -74,9 +77,10 @@ function validateIP(str){
 
 function invalidServer(name, variant, variantType, map, maxPlayers, numPlayers, hostPlayer) {
 
-       if (encodeURIComponent(name).match("%3C","%3E") || encodeURIComponent(variant).match("%3C","%3E") || encodeURIComponent(map).match("%3C","%3E") || encodeURIComponent(maxPlayers).match("%3C","%3E") || encodeURIComponent(numPlayers).match("%3C","%3E") || encodeURIComponent(hostPlayer).match("%3C","%3E"))
-		{
-			console.log("Javascript found in one of the variables, skipping server");
+       //if (encodeURIComponent(name).match("%3C","%3E") || encodeURIComponent(variant).match("%3C","%3E") || encodeURIComponent(map).match("%3C","%3E") || encodeURIComponent(maxPlayers).match("%3C","%3E") || encodeURIComponent(numPlayers).match("%3C","%3E") || encodeURIComponent(hostPlayer).match("%3C","%3E"))
+		if (/<|>/.test('' + name + variant + variantType + map + maxPlayers + numPlayers + hostPlayer))
+        {
+			console.log("Javascript potentially in one of the variables, skipping server");
 			return true;
 		}else{
 			return false;

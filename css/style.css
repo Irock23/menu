@@ -48,10 +48,10 @@ iframe
 
 .Container
 {
-	margin: 60px auto 30px auto;
+	margin: 40px 40px 40px 40px;
 	box-shadow:0 0 5px rgba(0, 0, 0, 0.4);
 	background:rgba(24, 24, 24, 0.71);
-	width: 960px;
+	width: auto;
 	padding: 50px 20px 35px 20px;
 	height: auto;
 }
@@ -120,5 +120,11 @@ table {margin-bottom:0px; border-spacing:0px;}
 th {font-weight:bold;}
 
 td{
-	padding:20px 5px 10px 10px;border-bottom:1px solid #555555;
+	padding:20px 5px 10px 10px;border-bottom:1px solid #555555;cursor: pointer;
+}
+
+td a
+{
+	 display: block; 
+	 padding: 4px; 
 }

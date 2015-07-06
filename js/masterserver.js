@@ -1,3 +1,10 @@
+if (!window.callbacks) window.callbacks = { //not in-game, give helper callbacks
+    connect: function (address) {
+        alert('Use the browser in-game\nor type "server.connect ' + address + '" in the console, which can be accessed with F1 or `');
+    },
+    def: true
+};
+
 $(document).ready(function() {
     // queryServer("192.99.124.162/list");
    // addServer("127.0.0.1:11775", "Test server", "emoose", "Guardian", "guardian", "Team Slayer", "1", "16");
@@ -41,10 +48,14 @@ function queryServer(serverIP) {
 }
 
 function promptPassword(serverIP) {
-    var password = prompt("The server at " + serverIP + " is passworded, enter the password to join", "");
-    if(password != null)
-    {
-        window.open("dorito:" + serverIP + "/" + password);
+    if (!callbacks.def) {
+        var password = prompt("The server at " + serverIP + " is passworded, enter the password to join", "");
+        if(password != null)
+        {
+            window.open("dorito:" + serverIP + "/" + password);
+        }
+    } else {
+        alert('Use the browser in-game\nor type "server.connect ' + serverIP + ' <password>" in the console, which can be accessed with F1 or `');
     }
 }
 

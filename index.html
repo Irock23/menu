@@ -1,84 +1,45 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
-<head>
-<meta charset="UTF-8" />
+<head><meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Eldorito Server Browser </title>
 
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Raleway" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Quicksand" />
+<title>Eldorito Server Browser </title>
 
 <link rel='stylesheet' href='./css/epicfullscreen.css' type='text/css' media='all' />
 <link rel='stylesheet' href='./css/style.css' type='text/css' media='all' />
-<link rel='stylesheet' href='./css/skin.css' type='text/css' media='all' />
 
 <script type='text/javascript' src='./js/jquery-1.11.0.min.js'></script>
 <script type='text/javascript' src='./js/jquery.ui.core.min.js'></script>
 <script type='text/javascript' src='./js/jquery.epicfullscreen.js'></script>
 <script type='text/javascript' src='./js/jquery.fancybox-1.3.4.pack.js'></script>
 <script type='text/javascript' src='./js/settings.js'></script>
+<script type='text/javascript' src='./js/players.js'></script>
 <script type='text/javascript' src='./js/common.js'></script>
-
-<script src="./src/ping.js" type="text/javascript"></script>
-
-<div id="fullscreen-1" class="epic-fullscreen" data-image="images/background/background.jpg"></div>
- 
+<script type='text/javascript' src='./js/masterserver.js'></script>
 </head>
- 
-<body class="home page">
- 
-<div id="header-wrapper">
-<div id="header-inner">
-<header></header>
-<div style="clear:both;"></div>
-</div>
 
-<div id="content-wrapper">
-        <section class="homepage">
-                <div id="section-title">
-                        <div id="teaser" class="teaser-no-title">
-                                <div id="browser-title"><img src="eldorito.png" alt="" height="50" width="50"> ELDORITO SERVER BROWSER</div>
-                                <header>
-		</header>
-</nav>
-        <center><button id="refresh" style="background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);">Refresh</button></center>
-        <table id="serverlist" style="width:100%">
+<div id="fullscreen-1" class="epic-fullscreen" data-image="images/background/background.jpg" style="z-index: -1; opacity: 1; background-color: transparent;"></div>
+
+<body>
+
+<div class="Container">
+<center><img src="./images/eldorito.png" alt="" height="85" width="100"></center>
+<center><div id="browser-title">ELDORITO SERVER BROWSER</div></center>
+<center><div id="players-online">0 Online</div></center>
+</br></br>
+<center><button id="refresh" style="background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);">Refresh</button></center>
+        <center><table id="serverlist" style="width:100%">
   <tr>
-    <td style="padding-left:10px;background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);width:240px"><b><center>Game</center></b></td>
-    <td style="padding-left:10px;background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);"><b>Server Name | Host Player</b></td>
-    <td style="padding-left:10px;background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);"><b><center>Status</center></b></td>
-    <td style="padding-left:10px;background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);"><b><center>Players</center></b></td>
+    <td style="background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);"><b>Server Name</b></td>
+    <td style="background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);"><b>Server</b></td>
+    <td style="background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);"><b>GameType</b></td>
+    <td style="background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);"><b>Map</b></td>
+    <td style="background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);"><b>Status</b></td>
+    <td style="background-color: rgba(255, 255, 255, 0.1);color: rgba(255,255,255,0.95);padding-right:10px;"><b>Players</b></td>
   </tr>
-  <td>
-</table><br>
+</table></center>
  
 <script type="text/javascript">
-$(document).ready(function()
-{
-    // queryServer("192.99.124.162/list");
-   // addServer("127.0.0.1:11775", "Test server", "emoose", "Guardian", "guardian", "Team Slayer", "1", "16");
-});
-
-    $("#serverlist").find("tr:gt(0)").remove();
-
-    $.getJSON( "http://192.99.124.162/list", function( data ) {
-        if(data.result.code != 0)
-        {
-            alert("Error received from master: " + data.result.msg);
-            return;
-        }
-        console.log(data);
-        for(var i = 0; i < data.result.servers.length; i++)
-        {
-            var serverIP = data.result.servers[i];
-	    if(validateIP(serverIP)) {
-		queryServer(serverIP);
-	    }
-        }
-    });
-
-
 
 $("#refresh").click(function()
 {
@@ -100,68 +61,6 @@ $("#refresh").click(function()
         }
     });
 });
-    
-function queryServer(serverIP)
-{
-    console.log(serverIP);
-    var startTime = Date.now();
-    $.getJSON("http://" + serverIP, function(serverInfo) {
-        var timeTaken = Date.now() - startTime;
-        console.log(timeTaken);
-        if(serverInfo.name === undefined) return;
-        var isPassworded = serverInfo.passworded !== undefined;
-	//if no serverInfo.map, they jumped into an active game without unannouncing their server, causing a duplicate unjoinable game
-        if(serverInfo.map == "") return;
-        
-	//if any variables include js tags, skip them
-	if(invalidServer(serverInfo.name, serverInfo.variant, serverInfo.variantType, serverInfo.mapFile, serverInfo.maxPlayers, serverInfo.numPlayers, serverInfo.hostPlayer) == true) return;    
-        
-        addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken);
-        console.log(serverInfo);
-    });
-}
-
-function promptPassword(serverIP)
-{
-    var password = prompt("The server at " + serverIP + " is passworded, enter the password to join", "");
-    if(password != null)
-    {
-        window.open("dorito:" + serverIP + "/" + password);
-    }
-}
-
-function sanitizeString(str){
-    str = str.toString();
-    if(str != null) str = str.replace(/(<([^>]+)>)/ig,"");
-    return str;
-}
-
-function validateIP(str){
-    str = str.toString();
-    if(str != null){
-		if(/^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/i.test(str)) {
-			return true;
-		}else{
-			console.log(str + " is not a valid ip, skipping");
-			return false;
-		}
-	}else {
-	console.log(str + " is not a valid ip, skipping");
-    return false;
-	}
-}
-
-function invalidServer(name, variant, variantType, map, maxPlayers, numPlayers, hostPlayer) {
-
-        if (encodeURIComponent(name).match("%3C","%3E") || encodeURIComponent(variant).match("%3C","%3E") || encodeURIComponent(map).match("%3C","%3E") || encodeURIComponent(maxPlayers).match("%3C","%3E") || encodeURIComponent(numPlayers).match("%3C","%3E") || encodeURIComponent(hostPlayer).match("%3C","%3E"))
-		{
-			console.log("Javascript found in one of the variables, skipping server");
-			return true;
-		}else{
-			return false;
-		}
-}
- 
 
 function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status, numplayers, maxplayers, ping)
 {
@@ -175,23 +74,21 @@ function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status,
     numplayers = sanitizeString(numplayers).substring(0,2);
     maxplayers = sanitizeString(maxplayers).substring(0,2);
 
-    var servName = "<td>" + name + "</br>" + "<b>Host</b> - " + host + "</br>" + "<b> IP </b> - " + ip + " - <a onclick=\"callbacks.connect('" + ip + "');\">" + "<b><font color=red>Join</font></b></a>"   + "</br>" + "<b>Variant</b> - " + map + "</br>" + "<b>GameType</b> - " + gamemode + "</br>" + "</td>";
+    var servName = "<td>" + "<a onclick=\"callbacks.connect('" + ip + "');\">" + name  + " <b>(" +  host + "</b>)" + "</a></td>";
     if(isPassworded)
         servName = "<td><a href=\"#\" onclick=\"promptPassword('" + ip + "');\">[PASSWORDED] " + name + " (" + host + ")</a></td>";
 
-    var servMapImage = "<td>" + "<img src=" + "images/maps/" + mapfile + ".png width=250px height=350px ></br>" + "</td>";
+    var servMap = "<td>" + map + "(" + mapfile + ")" +  "</td>";
+    var servGameType = "<td>" + gamemode + "</br>" + "</td>";
+    var servIP = "<td>" + ip + "</td>";
     var servStatus = "<td>" + status + "</td>";
     var servPlayers = "<td>" + numplayers + "/" + maxplayers + "</td>";
-
-    $('#serverlist tr:last').after("<tr>" + servMapImage + servName + servStatus + servPlayers + "</tr>");
+ 
+    $('#serverlist tr:last').after("<tr>" + servName + servIP + servGameType + servMap +   servStatus + servPlayers + "</tr>");
 
 }
-
  
 </script>
-            </div>
-        </div>
-    </section> 
 </div>
 </body>
 </html>

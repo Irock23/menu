@@ -1,26 +1,26 @@
-$(document).ready(function()
-{
+$(document).ready(function() {
     // queryServer("192.99.124.162/list");
    // addServer("127.0.0.1:11775", "Test server", "emoose", "Guardian", "guardian", "Team Slayer", "1", "16");
+    fetchServerList();
 });
 
-    $("#serverlist").find("tr:gt(0)").remove();
+function fetchServerList() {
+    $("#serverlist > tbody > tr").remove();
 
     $.getJSON( "http://192.99.124.162/list", function( data ) {
-        if(data.result.code != 0)
-        {
+        if(data.result.code != 0) {
             alert("Error received from master: " + data.result.msg);
             return;
         }
         console.log(data);
-        for(var i = 0; i < data.result.servers.length; i++)
-        {
+        for(var i = 0; i < data.result.servers.length; i++) {
             var serverIP = data.result.servers[i];
-	    if(validateIP(serverIP)) {
-		queryServer(serverIP);
-	    }
+	        if(validateIP(serverIP)) {
+		        queryServer(serverIP);
+	        }
         }
     });
+}
     
 function queryServer(serverIP)
 {
@@ -52,33 +52,34 @@ function promptPassword(serverIP)
 }
 
 function sanitizeString(str){
-    str = str.toString();
-    if(str != null) str = str.replace(/(<([^>]+)>)/ig,"");
-    return str;
+    return String(str).replace(/(<([^>]+)>)/ig,"") //shouldn't need to strip tags with the below replacements, but I'll keep it anyway
+                      .replace(/&/g, '&amp;')
+                      .replace(/</g, '&lt;')
+                      .replace(/>/g, '&gt;')
+                      .replace(/'/g, '&#39;')
+                      .replace(/"/g, '&quot;');
 }
 
 function validateIP(str){
-    str = str.toString();
-    if(str != null){
+    if (str) {
+        str = String(str);
 		if(/^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/i.test(str)) {
 			return true;
-		}else{
+		} else{
 			console.log(str + " is not a valid ip, skipping");
 			return false;
 		}
-	}else {
-	console.log(str + " is not a valid ip, skipping");
-    return false;
+	} else {
+    	console.log(str + " is not a valid ip, skipping");
+        return false;
 	}
 }
 
-function invalidServer(name, variant, variantType, map, maxPlayers, numPlayers, hostPlayer) {
-
-       if (encodeURIComponent(name).match("%3C","%3E") || encodeURIComponent(variant).match("%3C","%3E") || encodeURIComponent(map).match("%3C","%3E") || encodeURIComponent(maxPlayers).match("%3C","%3E") || encodeURIComponent(numPlayers).match("%3C","%3E") || encodeURIComponent(hostPlayer).match("%3C","%3E"))
-		{
-			console.log("Javascript found in one of the variables, skipping server");
-			return true;
-		}else{
-			return false;
-		}
+function invalidServer() {
+    if (/[<>]/.test(Array.prototype.slice.call(arguments).join(''))) {
+        console.log("Javascript potentially in one of the variables, skipping server");
+        return true;
+    } else {
+        return false;
+    }
 }

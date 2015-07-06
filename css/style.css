@@ -48,11 +48,11 @@ iframe
 
 .Container
 {
-	margin: 60px auto 30px auto;
+	margin: 40px 40px 40px 40px;
 	box-shadow:0 0 5px rgba(0, 0, 0, 0.4);
 	background:rgba(24, 24, 24, 0.71);
-	width: 960px;
-	padding: 50px 20px 35px 20px;
+	width: auto;
+	padding: 25px 20px 35px 20px;
 	height: auto;
 }
 
@@ -81,8 +81,9 @@ iframe
 }
 
 #refresh{
-	  width:960px;
+	  width:100%;
 	  height:25px;
+	  margin-top: 15px;
 	  margin-bottom: 10px;
 }
 
@@ -114,11 +115,32 @@ tr:hover
 	background:rgba(255, 255, 255, 0.05);
 }
 
+#serverlist > tbody > tr {
+	cursor: pointer;
+}
+
+.center {
+	text-align: center;
+}
+
+img.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 /*Tables	
 -----------------------------*/
-table {margin-bottom:0px; border-spacing:0px;}
-th {font-weight:bold;}
+table {
+	margin-bottom:0px;
+	border-spacing:0px;
+}
+th {
+	font-weight:bold;
+	text-align: left;
+}
 
-td{
-	padding:20px 5px 10px 10px;border-bottom:1px solid #555555;
+td, th {
+	padding:20px 5px 10px 10px;
+	border-bottom:1px solid #555555;
 }

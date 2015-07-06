@@ -108,10 +108,15 @@ tr:hover
 {
 	color:White;
 	margin-bottom:0px;
-	    font-weight: 450;
 	font-size:14px;
 	font-family:"Raleway", sans-serif;
 	background:rgba(255, 255, 255, 0.05);
+	width: 100%;
+}
+
+#serverlist > thead > tr > th, #refresh {
+	background-color: rgba(255, 255, 255, 0.1);
+	color: rgba(255,255,255,0.95);
 }
 
 #serverlist > tbody > tr {

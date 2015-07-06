@@ -5,7 +5,7 @@ $(document).ready(function() {
 });
 
 function fetchServerList() {
-    $("#serverlist > tbody > tr").remove();
+    $("#serverlist > tbody").empty();
 
     $.getJSON( "http://192.99.124.162/list", function( data ) {
         if(data.result.code != 0) {

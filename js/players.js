@@ -3,7 +3,11 @@
     https://creativecommons.org/licenses/by-nc-sa/4.0/
 */
 
-function initalize() {
+$(document).ready(function () {
+	initalizePlayerCount();
+});
+
+function initalizePlayerCount() {
 	getTotalPlayers();
 	totalPlayersLoop();
 }

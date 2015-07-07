@@ -1,6 +1,16 @@
+if (!window.callbacks) window.callbacks = { //not in-game, give helper callbacks
+    connect: function (address) {
+        prompt('Use the browser in-game\nor type this in the console, which can be accessed with F1 or `', 'server.connect ' + address);
+    },
+    def: true
+};
+
 $(document).ready(function() {
     // queryServer("192.99.124.162/list");
    // addServer("127.0.0.1:11775", "Test server", "emoose", "Guardian", "guardian", "Team Slayer", "1", "16");
+    $("#refresh").click(function() {
+        fetchServerList();
+    });
     fetchServerList();
 });
 
@@ -34,17 +44,32 @@ function queryServer(serverIP) {
         
 	    //if any variables include js tags, skip them
 	    if(!invalidServer(serverInfo.name, serverInfo.variant, serverInfo.variantType, serverInfo.mapFile, serverInfo.maxPlayers, serverInfo.numPlayers, serverInfo.hostPlayer)) {
-            addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken);
-            console.log(serverInfo);
+            $.ajax({
+                url: 'http://www.telize.com/geoip/' + serverIP.split(':')[0],
+                dataType: 'json',
+                timeout: 3000,
+                success: function (geoloc) {
+                    addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken, geoloc);
+                    console.log(serverInfo);
+                },
+                error: function () {
+                    addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken, null);
+                    console.log(serverInfo);
+                }
+            });
         }
     });
 }
 
 function promptPassword(serverIP) {
-    var password = prompt("The server at " + serverIP + " is passworded, enter the password to join", "");
-    if(password != null)
-    {
-        window.open("dorito:" + serverIP + "/" + password);
+    if (!callbacks.def) {
+        var password = prompt("The server at " + serverIP + " is passworded, enter the password to join", "");
+        if(password != null)
+        {
+            window.open("dorito:" + serverIP + "/" + password);
+        }
+    } else {
+       prompt('Use the browser in-game\nor type this in the console, which can be accessed with F1 or `', 'server.connect ' + serverIP + ' <password>');
     }
 }
 
@@ -79,4 +104,32 @@ function invalidServer() {
     } else {
         return false;
     }
+}
+
+function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status, numplayers, maxplayers, ping, geoloc) {
+    //because people can't be trusted with html, filter it out
+    name = sanitizeString(name).substring(0,50);
+    host = sanitizeString(host).substring(0,50);
+    map = sanitizeString(map).substring(0,50);
+    mapfile = sanitizeString(mapfile).substring(0,50);
+    gamemode = sanitizeString(gamemode).substring(0,50);
+    status = sanitizeString(status).substring(0,50);
+    numplayers = parseInt(numplayers);
+    maxplayers = parseInt(maxplayers);
+
+    if (geoloc && geoloc.country_code) name = '[' + sanitizeString(geoloc.country_code) + (geoloc.region_code ? '-' + sanitizeString(geoloc.region_code) : '') + '] ' + name;
+
+    if (isPassworded) name = '[PASSWORDED] ' + name;
+
+    var servName = "<td>" + name  + " <b>(" +  host + "</b>)" + "</td>";
+    var servMap = "<td>" + map + " (" + mapfile + ")" +  "</td>";
+    var servGameType = "<td>" + gamemode + "</br>" + "</td>";
+    var servIP = "<td>" + ip + "</td>";
+    var servStatus = "<td>" + status + "</td>";
+    var servPlayers = "<td>" + numplayers + "/" + maxplayers + "</td>";
+    
+    var onclick = (isPassworded ? 'promptPassword' : 'callbacks.connect') + "('" + ip + "');";
+
+    //$('#serverlist tr:last').after
+    $('#serverlist > tbody').append("<tr onclick=\"" + onclick + "\">" + servName + servIP + servGameType + servMap +   servStatus + servPlayers + "</tr>");
 }

@@ -1,6 +1,6 @@
 if (!window.callbacks) window.callbacks = { //not in-game, give helper callbacks
     connect: function (address) {
-        prompt('Use the browser in-game\nor type this in the console, which can be accessed with F1 or `', 'server.connect ' + address);
+        prompt('Use the browser in-game\nOr type/paste this in the console (F1 or `)', 'server.connect ' + address);
     },
     def: true
 };
@@ -69,7 +69,7 @@ function promptPassword(serverIP) {
             window.open("dorito:" + serverIP + "/" + password);
         }
     } else {
-       prompt('Use the browser in-game\nor type this in the console, which can be accessed with F1 or `', 'server.connect ' + serverIP + ' <password>');
+       prompt('Use the browser in-game\nOr type/paste this in the console (F1 or `)', 'server.connect ' + serverIP + ' <password>');
     }
 }
 

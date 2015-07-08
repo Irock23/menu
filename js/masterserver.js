@@ -16,14 +16,24 @@ $(document).ready(function() {
 
 var masterServers = [
     {
-        "list": "http://eldewrito-masterserver-thetwist84.c9.io/list",
-        "announce": "http://eldewrito-masterserver-thetwist84.c9.io/announce",
-        "stats": "http://eldewrito-masterserver-thetwist84.c9.io/stats"
+        "list": "http://eldewrito.red-m.net/list",
+        "announce": "http://eldewrito.red-m.net/announce",
+        "stats": "http://eldewrito.red-m.net/stats"
     },
     {
         "list": "http://192.99.124.162/list",
         "announce": "http://192.99.124.162/announce",
         "stats": "http://192.99.124.162/stats"
+    },
+    {
+        "list": "http://samantha-master.halo.click/list",
+        "announce": "http://samantha-master.halo.click/announce",
+        "stats": "http://samantha-master.halo.click/stats"
+    },
+    {
+        "list": "http://eldewrito-masterserver-thetwist84.c9.io/list",
+        "announce": "http://eldewrito-masterserver-thetwist84.c9.io/announce",
+        "stats": "http://eldewrito-masterserver-thetwist84.c9.io/stats"
     },
     {
         "list": "http://eldewrito-masterserver-1-thetwist84.c9.io/list",

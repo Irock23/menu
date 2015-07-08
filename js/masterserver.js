@@ -111,15 +111,11 @@ function queryServer(serverIP) {
 }
 
 function promptPassword(serverIP) {
-    if (!callbacks.def) {
-        var password = prompt("The server at " + serverIP + " is passworded, enter the password to join", "");
-        if(password != null)
-        {
-            window.open("dorito:" + serverIP + "/" + password);
-        }
-    } else {
-       prompt('Use the browser in-game\nOr type/paste this in the console (F1 or `)', 'server.connect ' + serverIP + ' <password>');
-    }
+    var password = prompt("The server at " + serverIP + " is passworded, enter the password to join", "");
+    if(password)
+        callbacks.connect(serverIP + ' ' + password);
+    else if (callbacks.def)
+        callbacks.connect(serverIP + ' <password>');
 }
 
 function sanitizeString(str) {

@@ -9,15 +9,73 @@ $(document).ready(function() {
     // queryServer("192.99.124.162/list");
    // addServer("127.0.0.1:11775", "Test server", "emoose", "Guardian", "guardian", "Team Slayer", "1", "16");
     $("#refresh").click(function() {
-        fetchServerList();
+        updateServerList();
     });
-    fetchServerList();
+    updateServerList();
 });
 
-function fetchServerList() {
+var masterServers = [
+    {
+        "list": "http://192.99.124.162/list",
+        "announce": "http://192.99.124.162/announce",
+        "stats": "http://192.99.124.162/stats"
+    },
+    {
+        "list": "http://eldewrito-masterserver-personality.c9.io/list",
+        "announce": "http://eldewrito-masterserver-personality.c9.io/announce",
+        "stats": "http://eldewrito-masterserver-personality.c9.io/stats"
+    },
+    {
+        "list": "http://eldewrito-masterserver-thetwist84.c9.io/list",
+        "announce": "http://eldewrito-masterserver-thetwist84.c9.io/announce",
+        "stats": "http://eldewrito-masterserver-thetwist84.c9.io/stats"
+    },
+    {
+        "list": "http://eldewrito-masterserver-1-thetwist84.c9.io/list",
+        "announce": "http://eldewrito-masterserver-1-thetwist84.c9.io/announce",
+        "stats": "http://eldewrito-masterserver-1-thetwist84.c9.io/stats"
+    },
+    {
+        "list": "http://argo.alligo.co/list",
+        "announce": "http://argo.alligo.co/announce",
+        "stats": "http://argo.alligo.co/stats"
+    },
+    {
+        "list": "http://80.240.130.4:8117/list",
+        "announce": "http://80.240.130.4:8117/announce",
+        "stats": "http://80.240.130.4:8117/stats"
+    },
+    {
+        "list": "http://192.168.40.130/list",
+        "announce": "http://192.168.40.130/announce",
+        "stats": "http://192.168.40.130/stats"
+    }
+], currentMS = 0;
+
+function getServerList(success, ms) {
+    if (typeof ms !== 'number') ms = currentMS;
+    ms = Math.min(Math.max(0, ms), masterServers.length);
+    $.ajax({
+        url: masterServers[ms].list,
+        dataType: 'json',
+        jsonp: false,
+        success: function () {
+            if (currentMS != ms) console.log('Now using ' + masterServers[ms].list);
+            currentMS = ms;
+            success.apply(null, arguments);
+        },
+        error: function () {
+            ms = (ms + 1) % masterServers.length;
+            if (ms != currentMS) getServerList(success, ms);
+            else console.log('No master servers are available!'); //went full circle with no success
+        }
+    });
+}
+
+function updateServerList() {
     $("#serverlist > tbody").empty();
 
-    $.getJSON( "http://eldewrito-masterserver-thetwist84.c9.io/list", function( data ) {
+    getServerList(function( data ) {
         if(data.result.code != 0) {
             alert("Error received from master: " + data.result.msg);
             return;
@@ -47,6 +105,7 @@ function queryServer(serverIP) {
             $.ajax({
                 url: 'http://www.telize.com/geoip/' + serverIP.split(':')[0],
                 dataType: 'json',
+                jsonp: false,
                 timeout: 3000,
                 success: function (geoloc) {
                     addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken, geoloc);

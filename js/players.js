@@ -14,7 +14,7 @@ function initalizePlayerCount() {
 
 function getTotalPlayers() {
 	var totalPlayers = 0;
-	$.getJSON("http://eldewrito-masterserver-thetwist84.c9.io/list", function(data) {
+	getServerList(function(data) {
 		for (var i = 0; i < data.result.servers.length; i++) {
 			var serverIP = data.result.servers[i];
 			if (validateIP(serverIP))

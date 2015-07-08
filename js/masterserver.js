@@ -17,7 +17,7 @@ $(document).ready(function() {
 function fetchServerList() {
     $("#serverlist > tbody").empty();
 
-    $.getJSON( "http://192.99.124.162/list", function( data ) {
+    $.getJSON( "http://eldewrito-masterserver-thetwist84.c9.io/list", function( data ) {
         if(data.result.code != 0) {
             alert("Error received from master: " + data.result.msg);
             return;

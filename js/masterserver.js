@@ -17,8 +17,8 @@ $(document).ready(function() {
 var masterServers = [
     {
         "list": "http://eldewrito.red-m.net/list",
-        "announce": "http://eldewrito.red-m.net/announce",
-        "stats": "http://eldewrito.red-m.net/stats"
+        "announce": undefined, //red_m's server doesn't have these
+        "stats": undefined
     },
     {
         "list": "http://192.99.124.162/list",
@@ -50,10 +50,10 @@ var masterServers = [
         "announce": "http://eldewrito-masterserver-personality.c9.io/announce",
         "stats": "http://eldewrito-masterserver-personality.c9.io/stats"
     }
-], currentMS = 0;
+], currentMS = 0, startMS = currentMS;
 
 function getServerList(success, ms) {
-    if (typeof ms !== 'number') ms = currentMS;
+    if (typeof ms !== 'number') ms = startMS = currentMS;
     ms = Math.min(Math.max(0, ms), masterServers.length);
     $.ajax({
         url: masterServers[ms].list,
@@ -66,7 +66,7 @@ function getServerList(success, ms) {
         },
         error: function () {
             ms = (ms + 1) % masterServers.length;
-            if (ms != currentMS) getServerList(success, ms);
+            if (ms != startMS) getServerList(success, ms);
             else console.log('No master servers are available!'); //went full circle with no success
         }
     });
@@ -108,11 +108,11 @@ function queryServer(serverIP) {
                 jsonp: false,
                 timeout: 3000,
                 success: function (geoloc) {
-                    addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken, geoloc);
+                    addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, serverInfo.eldewritoVersion, timeTaken, geoloc);
                     console.log(serverInfo);
                 },
                 error: function () {
-                    addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, timeTaken, null);
+                    addServer(serverIP, isPassworded, serverInfo.name, serverInfo.hostPlayer, serverInfo.map, serverInfo.mapFile, serverInfo.variant, serverInfo.status, serverInfo.numPlayers, serverInfo.maxPlayers, serverInfo.eldewritoVersion, timeTaken, null);
                     console.log(serverInfo);
                 }
             });
@@ -161,7 +161,7 @@ function invalidServer() {
     }
 }
 
-function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status, numplayers, maxplayers, ping, geoloc) {
+function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status, numplayers, maxplayers, version, ping, geoloc) {
     //because people can't be trusted with html, filter it out
     name = sanitizeString(name).substring(0,50);
     host = sanitizeString(host).substring(0,50);
@@ -171,6 +171,9 @@ function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status,
     status = sanitizeString(status).substring(0,50);
     numplayers = parseInt(numplayers);
     maxplayers = parseInt(maxplayers);
+    version = sanitizeString(version).substring(0, 10);
+
+    if (version) name = '[' + version + '] ' + name;
 
     if (geoloc && geoloc.country_code) name = '[' + sanitizeString(geoloc.country_code) + (geoloc.region_code ? '-' + sanitizeString(geoloc.region_code) : '') + '] ' + name;
 

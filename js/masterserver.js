@@ -173,11 +173,11 @@ function addServer(ip, isPassworded, name, host, map, mapfile, gamemode, status,
     maxplayers = parseInt(maxplayers);
     version = sanitizeString(version).substring(0, 10);
 
-    if (version) name = '[' + version + '] ' + name;
-
     if (geoloc && geoloc.country_code) name = '[' + sanitizeString(geoloc.country_code) + (geoloc.region_code ? '-' + sanitizeString(geoloc.region_code) : '') + '] ' + name;
 
-    if (isPassworded) name = '[PASSWORDED] ' + name;
+    if (isPassworded) name = '[\uD83D\uDD12] ' + name;
+
+    if (version) name = '[' + version + '] ' + name;
 
     var servName = "<td>" + name  + " <b>(" +  host + "</b>)" + "</td>";
     var servMap = "<td>" + map + " (" + mapfile + ")" +  "</td>";

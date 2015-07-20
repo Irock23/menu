@@ -1,9 +1,21 @@
-if (!window.callbacks) window.callbacks = { //not in-game, give helper callbacks
-    connect: function (address) {
-        prompt('Use the browser in-game\nOr type/paste this in the console (F1 or `)', 'server.connect ' + address);
-    },
-    def: true
-};
+if (!window.callbacks) {
+	window.callbacks = { //helper callbacks
+	    connect: function (address) {
+	    	var cmd = 'server.connect ' + address;
+	    	if (dewRCON.isOpen())
+	    		dewRCON.send(cmd);
+	    	else
+	        	prompt('Use the browser in-game\nOr type/paste this in the console (F1 or `)', cmd);
+	    },
+	    def: true
+	};
+	window.dewRCON = {
+		webSocket: new WebSocket('ws://127.0.0.1:11776', 'dew-rcon'),
+		isOpen: function () { return dewRCON.webSocket.readyState === 1; },
+		send: function (data) { dewRCON.webSocket.send(data); },
+		close: function (code, reason) { dewRCON.webSocket.close(code, reason); }
+	};
+}
 
 $(document).ready(function() {
     // queryServer("192.99.124.162/list");
@@ -124,7 +136,7 @@ function promptPassword(serverIP) {
     var password = prompt("The server at " + serverIP + " is passworded, enter the password to join", "");
     if(password)
         callbacks.connect(serverIP + ' ' + password);
-    else if (callbacks.def)
+    else if (callbacks.def && !dewRCON.isOpen())
         callbacks.connect(serverIP + ' <password>');
 }
 

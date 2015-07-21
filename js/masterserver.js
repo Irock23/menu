@@ -9,17 +9,10 @@ if (!window.callbacks) {
 	    },
 	    def: true
 	};
-	window.dewRCON = {
-		webSocket: new WebSocket('ws://127.0.0.1:11776', 'dew-rcon'),
-		isOpen: function () { return dewRCON.webSocket.readyState === 1; },
-		send: function (data) { dewRCON.webSocket.send(data); },
-		close: function (code, reason) { dewRCON.webSocket.close(code, reason); }
-	};
+	window.dewRCON = new DewRCON();
 }
 
 $(document).ready(function() {
-    // queryServer("192.99.124.162/list");
-   // addServer("127.0.0.1:11775", "Test server", "emoose", "Guardian", "guardian", "Team Slayer", "1", "16");
     $("#refresh").click(function() {
         updateServerList();
     });
@@ -29,7 +22,7 @@ $(document).ready(function() {
 var masterServers = [
     {
         "list": "http://eldewrito.red-m.net/list",
-        "announce": undefined, //red_m's server doesn't have these
+        "announce": "http://eldewrito.red-m.net/announce", 
         "stats": undefined
     },
     {

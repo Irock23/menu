@@ -108,7 +108,7 @@ function queryServer(serverIP) {
 	    //if any variables include js tags, skip them
 	    if(!invalidServer(serverInfo.name, serverInfo.variant, serverInfo.variantType, serverInfo.mapFile, serverInfo.maxPlayers, serverInfo.numPlayers, serverInfo.hostPlayer)) {
             $.ajax({
-                url: 'http://www.telize.com/geoip/' + serverIP.split(':')[0],
+                url: 'http://freegeoip.net/json/' + serverIP.split(':')[0],
                 dataType: 'json',
                 jsonp: false,
                 timeout: 3000,
